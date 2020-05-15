@@ -29,5 +29,23 @@ def server_error(e):
         """.format(e), 500
 
 
+# Defines a POST supporting calculate route
+@app.route('/calculate', methods=['POST'])
+def calculateHandler():
+    if request.method == 'POST':
+        l = request.form.get('labour')
+        c = request.form.get('conservative')
+
+        if l == '' or c == '':
+            return doRender('index.html',
+                    {'note': 'Please specify a number for each group!'})
+        else:
+            total = float(l) + float(c)
+            lP = int(float(l) / total * 100)
+            cP = int(float(c) / total * 100)
+            return doRender('chart.html', {'data': str(lP) + ',' + str(cP)})
+        return 'Should not ever get here'
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
