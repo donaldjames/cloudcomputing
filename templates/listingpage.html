@@ -4,19 +4,73 @@
 	<!-- Load plotly.js into the DOM -->
 	<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 	<script>
-	var price = {{ data_dict.Price }};
-	var movingavg = {{ data_dict.Movingavg }};
-	var dates = {{ data_dict.Dates }};
-	</script>
-	<!--script async src="/static/plotly.js"></script-->
-	<script src="/static/plotly.js"></script>
+		function openForm(date_id) {
+		  document.getElementById("var_calculator_window").classList.remove("hide");
+		  var var_date = document.getElementById("date_" + date_id).innerText;
+		  document.getElementById("var_calc_date").value = var_date;
+		  document.getElementById("cover").classList.add("overlay");
+		}
 
+		function closeForm() {
+		  document.getElementById("var_calculator_window").classList.add("hide");
+		  document.getElementById("cover").classList.remove("overlay");
+		}
+	</script>
+	<script>
+		var encoded_date_str = '{{graphData.Dates}}';
+		var decoded_date_str = encoded_date_str.replace(/&#39;/g, "'");
+		decoded_date_sub_str = decoded_date_str.substring(1, decoded_date_str.length-1);
+		decoded_date_sub_str = decoded_date_sub_str.replace(/'/g, '');
+		var dates = decoded_date_sub_str.split(", ");
+		var price = {{graphData.Price}};
+		var movingavg = {{graphData.Movingavg}};
+	</script>
+	<script async src="/static/plotly.js"></script>
 {% endblock %}
 
 {% block title %}
     Display
 {% endblock title %}
 
+{% block body_id %}listing_page{% endblock %}
+
 {% block page_block %}
-	<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+	<div id="cover"></div>
+		<div id='myDiv'><!-- Graph --></div>
+		<div id="table-wrapper">
+			<div id="table-scroll">
+				<table>
+					<tr>
+						{% for header in headers %}
+							<th> {{ header }} </th>
+						{% endfor %}
+						<th>
+							Buy/Sell
+						</th>
+					</tr>
+
+					{% for data in dataArray %}
+						<tr>
+							<td style="display:None" id="date_{{ loop.index - 1 }}">{{ data[0] }}</td>
+							{% for col in data %}
+								<td id="{{ headers[loop.index - 1] }}"> {{ col }} </td>
+							{% endfor %}
+							{% if data[6] <= data[5] %}
+								<td class="button_td">
+									<button name="date" onclick="openForm({{ loop.index - 1 }})" type="submit">BUY</button>
+								</td>
+							{% else %}
+								<td class="button">
+									<button name="date" onclick="openForm({{ loop.index - 1 }})" type="submit">SELL</button>
+								</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id="var_calculator_window" class="hide">
+		{% include 'var_calc_form.html' %}
+	</div>
 {% endblock page_block %}

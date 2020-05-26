@@ -10,7 +10,7 @@ var trace1 = {
 var trace2 = {
   type: "scatter",
   mode: "lines",
-  name: 'AAPL Low',
+  name: 'Moving Average',
   x: dates,
   y: movingavg,
   line: {color: '#7F7F7F'}
@@ -19,7 +19,7 @@ var trace2 = {
 var data = [trace1,trace2];
 
 var layout = {
-  title: 'Time Series with Rangeslider',
+  title: 'Price and Moving average plotted against date',
   xaxis: {
     autorange: true,
     range: ['2015-02-17', '2017-02-16'],
@@ -39,7 +39,7 @@ var layout = {
         {step: 'all'}
       ]},
     rangeslider: {range: ['2015-02-17', '2017-02-16']},
-    type: 'date'
+    type: 'dates'
   },
   yaxis: {
     autorange: true,

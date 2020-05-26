@@ -3,18 +3,18 @@
     <head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
         <link href="/static/main.css" rel="stylesheet" type="text/css" />
-        {% block script %} 
-        {% endblock %}
+        <link href='https://fonts.googleapis.com/css?family=Enriqueta' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+        {% block script %}{% endblock %}
         <title>
-            {% block title %} replace title {% endblock %}
+            {% block title %}{% endblock %}
         </title>
     </head>
 
-    <body>
-        <div id="page">
-            {% block page_block %}
-            {% endblock %}
-        </div>
+    <body id="{% block body_id %}{% endblock %}">
+        {% block page_block %}
+        {% endblock %}
+
         <div id="footer">
             <p>&copy; Donald James</p>
         </div>
