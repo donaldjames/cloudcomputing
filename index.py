@@ -21,7 +21,6 @@ def doRender(tname, values={}):
         return render_template('index.html')
     return render_template(tname, **values)
 
-############################################################################################
 @app.route('/varcalc', methods=['GET', 'POST'])
 def varcalculationwindow():
     if request.method == 'GET':
@@ -30,7 +29,6 @@ def varcalculationwindow():
         date = request.args.get("date")
         parameters = {'companyName': companyName, 'date': date}
         return render_template("varcalculator_popupwindow.html", parameters=parameters)
-############################################################################################
 
 @app.errorhandler(500)
 def server_error(e):
@@ -50,24 +48,25 @@ def varcalculation():
         date = request.form.get("date")
         date = decode_date(date)
         resource_count = int(resources)
-        sample = str(round(int(sampleSize)/int(resources)))
+        sample = str(round(int(sampleSize)/resource_count))
         parameters = '{"windowSize": "'+windowSize+'", "companyName": "'+companyName+'", "date": "'+date+'", "confdn_intrvl": "'+confdn_intrvl+'", "sampleSize": "'+sample+'"}'
-        response = lambda_process(parameters)
+        # using multithreading library function to make 'resource_count' parallel calls to lambda with 'sample/resource_count' number of samples
+        pool = mp.Pool(processes = resource_count)
+        var_value_list=pool.map(var_calc_lambda, [parameters for r in range(0,resource_count)])
+        avg_var_value = sum(var_value_list)/resource_count
         message = {
-            "var": response
+            "var_list": var_value_list,
+            "average_var_value": avg_var_value,
+            "companyName": companyName,
+            "windowSize": windowSize,
+            "confdn_intrvl": confdn_intrvl,
+            "sampleSize": sampleSize,
+            "resources": resources
         }
-        # # Parallel processing using multiprocessing
-        # mp_parallel = mp.Queue()
-        # # Defining the number of resources to be used
-        # # pool = mp.Pool(processes=resource_count)
-        # # mp_parallel=[pool.map(lambda_process, args=[parameters]) for x in range(0,resource_count)]
-        # print('-------------\n'*5)
-        # print(mp_parallel)
-        #result = [r.get() for r in mp_parallel]
-        #response = decode_response(response)
     return render_template('varcalctemplate.html', message=message)
 
-def lambda_process(parameters):
+# lambda function for var calculations
+def var_calc_lambda(parameters):
     c = http.client.HTTPSConnection(amazon_instance)
     c.request("POST", newSeries, parameters)
     response = c.getresponse()
