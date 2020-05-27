@@ -21,6 +21,16 @@ def doRender(tname, values={}):
         return render_template('index.html')
     return render_template(tname, **values)
 
+############################################################################################
+@app.route('/varcalc', methods=['GET', 'POST'])
+def varcalculationwindow():
+    if request.method == 'GET':
+        companyName = request.args.get("cn")
+        # cwindowSize = request.args("windowSize")
+        date = request.args.get("date")
+        parameters = {'companyName': companyName, 'date': date}
+        return render_template("varcalculator_popupwindow.html", parameters=parameters)
+############################################################################################
 
 @app.errorhandler(500)
 def server_error(e):
@@ -41,11 +51,8 @@ def varcalculation():
         date = decode_date(date)
         resource_count = int(resources)
         sample = str(round(int(sampleSize)/int(resources)))
-        parameters = '{"windowSize": "'+windowSize+'", "companyName": "'+companyName+'", "date": "'+date+'", "confdn_intrvl": "'+confdn_intrvl+'", "sampleSize": "'+sample+'"}'        
-        c = http.client.HTTPSConnection(amazon_instance)
-        c.request("POST", newSeries, parameters)
-        response = c.getresponse()
-        response = decode_response(response)
+        parameters = '{"windowSize": "'+windowSize+'", "companyName": "'+companyName+'", "date": "'+date+'", "confdn_intrvl": "'+confdn_intrvl+'", "sampleSize": "'+sample+'"}'
+        response = lambda_process(parameters)
         message = {
             "var": response
         }
@@ -60,17 +67,12 @@ def varcalculation():
         #response = decode_response(response)
     return render_template('varcalctemplate.html', message=message)
 
-# def lambda_process(arguments):
-#     print('*********\n'*5)
-#     c = http.client.HTTPSConnection(amazon_instance)
-#     c.request("POST", newSeries, arguments)
-#     response = c.getresponse()
-#     # response = decode_response(response)
-#     response1 = response.read()
-#     response = response.decode()    
-#     data = json.loads(response)
-#     print(data['body'])
-#     return data['body']
+def lambda_process(parameters):
+    c = http.client.HTTPSConnection(amazon_instance)
+    c.request("POST", newSeries, parameters)
+    response = c.getresponse()
+    response = decode_response(response)
+    return response
 
 # post the window size and the company name calls lambda and shows the
 # graph and table in template
@@ -89,22 +91,41 @@ def movingaveragecalculation():
         d = http.client.HTTPSConnection(amazon_instance)
         d.request("POST", startEc2Instance)
         d.getresponse()
-        headers = ["Date", "Open", "High", "Low", "Close", "AdjClose", "MovingAverage", "Volume"]
+        headers = ["Date", "Adj Close", "Moving Average", "Signal", "Current Position"]
+        # Extracting the data from lambda response
         data = decode_response(response)
-        datasets = []
-        # transforming the data
-        for d in data:
-            row = []
-            row.append(encode_date(d[0]))
-            for i in range(1, 7):
-                row.append(float(d[i]))
-            row.append(int(d[7]))
-            datasets.append(row)
+        # sorting the data and updating the table fields
+        dataset = listing_page_data(data)
         # dictionary for plotting the graph
-        dataFrame = pd.DataFrame(datasets, columns=headers)
-        graph_data = {'Dates': dataFrame.Date.to_list(), 'Movingavg': dataFrame.MovingAverage.to_list(), 'Price': dataFrame.AdjClose.to_list()}
-        return render_template('listingpage.html', dataArray=datasets, headers=headers, graphData=graph_data, companyName=companyName)
+        dataFrame = pd.DataFrame(dataset, columns=headers)
+        graph_data = {'Dates': dataFrame["Date"].to_list(), 'Movingavg': dataFrame["Moving Average"].to_list(), 'Price': dataFrame["Adj Close"].to_list()}
+        return render_template('listingpage.html', dataArray=dataset, headers=headers, graphData=graph_data, companyName=companyName)
 
+
+# listing page table values
+def listing_page_data(data):
+    dataset = []
+    # transforming the data
+    init_case = 1;
+    for d in data:
+        row = []
+        row.append(encode_date(d[0])) # Date
+        adj_close = float(d[5]) 
+        mov_avg = float(d[6])
+        bs_signal = int(d[8])
+        row.append(adj_close) # Adj closing
+        row.append(mov_avg) # Moving Average
+        row.append(bs_signal)
+        if init_case == 1:
+            cur_position = adj_close * 1000
+            init_case = 0
+        elif bs_signal != 0:
+            cur_position = adj_close * 1000 * bs_signal
+        else:
+            pass
+        row.append(cur_position)
+        dataset.append(row)
+    return dataset
 
 def encode_date(date):
     dd, mm, yyyy = date.split('/')

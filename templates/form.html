@@ -1,12 +1,12 @@
 <div id="landing_page_form">
     <form id="stats" method="post" action="/movingavgdata">
         <label for="windowsize">Window Size:</label>
-        <input type="text" id="windowsize" name="windowSize"><br><br>
+        <input type="text" id="windowsize" name="windowSize" required><br><br>
         <div class="block" id="buttons">
-            <button name="button" class="button" type="submit" value="Amazon">Amazon</button>
-            <button name="button" class="button" type="submit" value="Apple">Apple</button>
-            <button name="button" class="button" type="submit" value="Alibaba">Alibaba</button>
-            <button name="button" class="button" type="submit" value="Bitcoin">Bitcoin</button>
+            <button name="button" class="button" type="submit" id="amazon" value="Amazon">Amazon</button>
+            <button name="button" class="button" type="submit" id="apple" value="Apple">Apple</button>
+            <button name="button" class="button" type="submit" id="alibaba" value="Alibaba">Alibaba</button>
+            <button name="button" class="button" type="submit" id="bitcoin" value="Bitcoin">Bitcoin</button>
         </div>
     </form>
 </div>

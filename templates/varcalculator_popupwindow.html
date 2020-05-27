@@ -1,0 +1,33 @@
+<html>
+    <head>
+        VAR calculator
+        <link href="/static/main.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body id="var_calculator_window">
+        <div id="pop_up_window">
+            <form action="/varcalculator" id="stats" method="post">
+                <input type="hidden" name="companyName" value={{ parameters.companyName }}></input>
+                
+
+                <label for="windowSize">Window Size:</label><br/>
+                <input type="text" id="windowSize" name="windowSize" required></input><br/>
+
+                <label for="sampleSize">Sample Size(S):</label><br/>
+                <input type="text" id="sampleSize" name="sampleSize" required></input><br/>
+                
+                <label for="date">Date:</label><br/>
+                <input type="text" id="var_calc_date" name="date" value={{ parameters.date }} readonly></input><br/>
+                
+                <label for="confdn_intrvl">Confidence Interval (95 or 99):</label><br/>
+                <input type="text" id="confdn_intrvl" name="confdn_intrvl" required></input><br/>
+
+                <label for="resources">Resources (R):</label><br/>
+                <input type="text" id="resources" name="resources" required></input><br/>
+                <div id="button_div">
+                    <button name="button" type="submit" id="submit_button" class="button" value="submit">Submit</button>
+                    <button class="button" onclick="closeForm()">Close</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

@@ -5,15 +5,17 @@
 	<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 	<script>
 		function openForm(date_id) {
-		  document.getElementById("var_calculator_window").classList.remove("hide");
+		  // document.getElementById("var_calculator_window").classList.remove("hide");
 		  var var_date = document.getElementById("date_" + date_id).innerText;
+		  redirect_url = "/varcalc?date="+var_date+"&cn="+companyName
+		  window.open(redirect_url, "VAR", "toolbar=1,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
 		  document.getElementById("var_calc_date").value = var_date;
-		  document.getElementById("cover").classList.add("overlay");
+		  // document.getElementById("cover").classList.add("overlay");
 		}
 
 		function closeForm() {
-		  document.getElementById("var_calculator_window").classList.add("hide");
-		  document.getElementById("cover").classList.remove("overlay");
+		  // document.getElementById("var_calculator_window").classList.add("hide");
+		  // document.getElementById("cover").classList.remove("overlay");
 		}
 	</script>
 	<script>
@@ -24,6 +26,7 @@
 		var dates = decoded_date_sub_str.split(", ");
 		var price = {{graphData.Price}};
 		var movingavg = {{graphData.Movingavg}};
+		var companyName = '{{companyName}}';
 	</script>
 	<script async src="/static/plotly.js"></script>
 {% endblock %}
@@ -51,17 +54,33 @@
 
 					{% for data in dataArray %}
 						<tr>
-							<td style="display:None" id="date_{{ loop.index - 1 }}">{{ data[0] }}</td>
-							{% for col in data %}
-								<td id="{{ headers[loop.index - 1] }}"> {{ col }} </td>
-							{% endfor %}
-							{% if data[6] <= data[5] %}
+							<td id="date_{{ loop.index - 1 }}" class="date_field">{{ data[0] }}</td>
+							<td class="adjusted_closing">{{ data[1] }}</td>
+							<td class="moving_average">{{ data[2] }}</td>
+							{% if data[3] == 1 %}
+								<td><div class="up_arrow"></div></td>
+							{% elif data[3] == 0 %}
+								<td><div></div></td>
+							{% else %}
+								<td><div class="down_arrow"></div></td>
+							{% endif %}
+							<td class="current_position">{{ data[4] }}</td>
+							
+							{% if data[3] == -1 %}
 								<td class="button_td">
-									<button name="date" onclick="openForm({{ loop.index - 1 }})" type="submit">BUY</button>
+									<button name="date" onclick="openForm({{ loop.index - 1 }})" type="submit">
+										Sell
+									</button>
+								</td>
+							{% elif data[3] == 1 %}
+								<td class="button_td">
+									<button name="date" onclick="openForm({{ loop.index - 1 }})" type="submit">
+										Buy
+									</button>
 								</td>
 							{% else %}
-								<td class="button">
-									<button name="date" onclick="openForm({{ loop.index - 1 }})" type="submit">SELL</button>
+								<td class="button_td">
+									----
 								</td>
 							{% endif %}
 						</tr>

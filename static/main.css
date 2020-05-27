@@ -71,7 +71,7 @@ IMG.displayed{
 }
 
 #footer a{
-	color: #BABABA;
+	color: #712af7;
 }
 
 #table-wrapper {
@@ -103,14 +103,10 @@ IMG.displayed{
   border:1px solid red;
 }
 
-#var_calculator_window {
-	position: absolute;
-	top: 25%;
-	left: 35%;
-	width: 450px;
+body#var_calculator_window {
+	z-index: 3;
+	background: #fff;
 	text-align: center;
-	height: auto;
-	border-radius: 5px;
 }
 
 .button {
@@ -122,13 +118,40 @@ IMG.displayed{
 	font-size: 20px;
 }
 
+#landing_page button {
+	height: 70px;
+	width: 120px;
+	background-color: #712af7;
+}
+
+#landing_page input	{
+	height: 30px;
+	font-size: 21px;
+}
+
 #landing_page_form {
 	margin-top: 20%;
 	text-align: center;
 }
 
 #landing_page_form label {
-	font-size: 20px;
+	font-size: 24px;
+}
+
+.up_arrow {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 20px solid #41ed1e;
+}
+
+.down_arrow {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 20px solid #ff0000;
 }
 
 input {
@@ -141,6 +164,11 @@ table {
 	width: 90%;
 	margin: auto;
 	font-family: 'Abel';
+}
+
+table th {
+	position: sticky;
+	top:0;
 }
 
 .overlay {
@@ -156,11 +184,6 @@ table {
 	cursor: pointer;
 }
 
-#var_calculator_window {
-	z-index: 3;
-	background: #fff;
-}
-
 #pop_up_window {
 	padding: 3% 20%;
 	text-align: left;
@@ -169,3 +192,8 @@ table {
 #pop_up_window button {
 	height: 35px;
 }
+
+.gtitle {
+	font-size: 25px !important;
+}
+
