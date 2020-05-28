@@ -1,2 +1,6 @@
 runtime: python37
 entrypoint: gunicorn -b :$PORT index:app
+
+handlers:
+- url: /static
+  static_dir: static
