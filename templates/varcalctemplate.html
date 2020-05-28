@@ -1,11 +1,18 @@
 {% extends "_base.html" %}
 
 {% block title %}
-    Finance
+    Value At Risk
 {% endblock title %}
 
 {% block body_id %}landing_page{% endblock %}
 
 {% block page_block %}
-	<h1> Var value: {{ message.var }}</h1>
+	<p>Data Used: {{ message.companyName }}</p>
+	<p>Window size: {{ message.windowSize }}</p>
+	<p>Confidence Interval: {{ message.confdn_intrvl }}</p>
+	<p>Sample Size(S): {{ message.sampleSize }}</p>
+	<p>Resources(R): {{ message.resources }}</p>
+	<p>Average VAR: {{ message.average_var_value }} ({{ message.var_percentage }}%)</p>
+	<p>List of values returned for {{ message.sampleSize }} / {{ message.resources }} samples using {{ message.resources }} parallel calls to lambda function</p>
+	<p>{{ message.var_list }}</p>
 {% endblock page_block %}
