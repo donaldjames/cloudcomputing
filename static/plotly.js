@@ -19,7 +19,7 @@ var trace2 = {
 var data = [trace1,trace2];
 
 var layout = {
-  title: companyName,
+  title: company_name,
   xaxis: {
     autorange: true,
     range: ['2015-02-17', '2017-02-16'],
