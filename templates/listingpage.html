@@ -5,20 +5,14 @@
 	<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 	<script>
 		function openForm(date_id) {
-		  // document.getElementById("var_calculator_window").classList.remove("hide");
 		  var var_date = document.getElementById("date_" + date_id).innerText;
-		  redirect_url = "/varcalc?date="+var_date+"&cn="+companyName
+		  redirect_url = "http://3.230.200.198/varcalc?date="+var_date+"&cn="+companyName
 		  window.open(redirect_url, "VAR", "toolbar=1,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
 		  document.getElementById("var_calc_date").value = var_date;
-		  // document.getElementById("cover").classList.add("overlay");
-		}
-
-		function closeForm() {
-		  // document.getElementById("var_calculator_window").classList.add("hide");
-		  // document.getElementById("cover").classList.remove("overlay");
 		}
 	</script>
 	<script>
+		// Reading the data in graphdata dictionary and passing it to plotly
 		var encoded_date_str = '{{graphData.Dates}}';
 		var decoded_date_str = encoded_date_str.replace(/&#39;/g, "'");
 		decoded_date_sub_str = decoded_date_str.substring(1, decoded_date_str.length-1);
@@ -28,6 +22,7 @@
 		var movingavg = {{graphData.Movingavg}};
 		var companyName = '{{companyName}}';
 	</script>
+	<!-- calling plotly asynchronously to plot the graph -->
 	<script async src="/static/plotly.js"></script>
 {% endblock %}
 
@@ -39,6 +34,7 @@
 
 {% block page_block %}
 	<div id="cover"></div>
+		<div><a href="/">Home</a></div>
 		<div id='myDiv'><!-- Graph --></div>
 		<div id="table-wrapper">
 			<div id="table-scroll">
@@ -69,13 +65,13 @@
 							{% if data[3] == -1 %}
 								<td class="button_td">
 									<button name="date" onclick="openForm({{ loop.index - 1 }})" type="submit">
-										Sell
+										SELL
 									</button>
 								</td>
 							{% elif data[3] == 1 %}
 								<td class="button_td">
 									<button name="date" onclick="openForm({{ loop.index - 1 }})" type="submit">
-										Buy
+										BUY
 									</button>
 								</td>
 							{% else %}
