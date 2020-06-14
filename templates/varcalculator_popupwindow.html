@@ -10,7 +10,7 @@
                 
 
                 <label for="windowSize">Window Size:</label><br/>
-                <input type="text" id="windowSize" name="windowSize" required></input><br/>
+                <input type="number" id="windowSize" name="windowSize" min=1 max={{ parameters.maxws }} required></input><br/>
 
                 <label for="sampleSize">Sample Size(S):</label><br/>
                 <input type="text" id="sampleSize" name="sampleSize" required></input><br/>
