@@ -4,7 +4,8 @@ var trace1 = {
   name: 'Price',
   x: dates,
   y: price,
-  line: {color: '#17BECF'}
+  line: {color: '#ff0000'}
+  // line: {color: '#17BECF'}
 }
 
 var trace2 = {
@@ -13,13 +14,17 @@ var trace2 = {
   name: 'Moving Average',
   x: dates,
   y: movingavg,
-  line: {color: '#7F7F7F'}
+  line: {color: '#0e8e1b'}
+  // line: {color: '#7F7F7F'}
 }
 
 var data = [trace1,trace2];
 
 var layout = {
   title: company_name,
+  plot_bgcolor: "black",
+  paper_bgcolor: "#fff3",
+  height: 600,
   xaxis: {
     autorange: true,
     range: ['2015-02-17', '2017-02-16'],
@@ -38,7 +43,7 @@ var layout = {
         },
         {step: 'all'}
       ]},
-    rangeslider: {range: ['2015-02-17', '2017-02-16']},
+    // rangeslider: {range: ['2015-02-17', '2017-02-16']},
     type: 'dates'
   },
   yaxis: {
