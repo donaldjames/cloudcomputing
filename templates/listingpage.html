@@ -7,9 +7,9 @@
 		function openForm(date_id) {
 		  var var_date = document.getElementById("date_" + date_id).innerText;
 		  // opening a new window with EC2 instance and passing the date and company name as parameters
-		  redirect_url = "http://3.230.200.198/varcalc?date="+var_date+"&cn="+company_name
+		  redirect_url = "http://3.230.200.198/varcalc?date="+var_date+"&cn="+company_name+"&mxws="+date_id
 		  // Local template for trial use
-		  // redirect_url = "/varcalc?date="+var_date+"&cn="+company_name
+		  // redirect_url = "/varcalc?date="+var_date+"&cn="+company_name+"&mxws="+date_id
 		  window.open(redirect_url, "_blank", "toolbar=1,scrollbars=yes,resizable=yes,top=200,left=500,width=400,height=400", replace=false);
 		  document.getElementById("var_calc_date").value = var_date;
 		}
