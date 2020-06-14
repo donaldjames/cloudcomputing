@@ -53,11 +53,17 @@ def varcalculation():
         sample = str(round(int(sampleSize)/resource_count))
         parameters = '{"windowSize": "'+windowSize+'", "companyName": "'+companyName+'", "date": "'+date+'", "confdn_intrvl": "'+confdn_intrvl+'", "sampleSize": "'+sample+'"}'
         pool = mp.Pool(processes = resource_count)
-        var=pool.map(var_calc_lambda_function, [parameters for x in range(1,resource_count+1)])
-        print(type(var[0]))
-        var_val_list = [float(v) for v in var]
-        var_avg = sum(var_val_list)/resource_count
+        var_res_list=pool.map(var_calc_lambda_function, [parameters for x in range(1,resource_count+1)])
+        mean = [] 
+        std = []
+        var = []
+        for res in var_res_list:
+            mean.append(float(res['mean']))
+            std.append(float(res['std']))
+            var.append(float(res['var']))
+        var_avg = sum(var)/resource_count
         var_percentage = var_avg * int(sample)
+        profitorloss = round(float(res['profitorloss']), 2)
         message = {
             "var_list": var,
             "average_var_value": var_avg,
@@ -66,7 +72,11 @@ def varcalculation():
             "resources": resource_count,
             "confdn_intrvl": confdn_intrvl,
             "sampleSize": sampleSize,
-            "var_percentage": var_percentage
+            "var_percentage": var_percentage,
+            "mean": mean[0],
+            "std": std[0],
+            "date": date,
+            "profit_or_loss": profitorloss
         }
     return render_template('varcalctemplate.html', message=message)
 
@@ -148,6 +158,15 @@ def decode_response(response):
     else:
         return false
 
+def decode_var_response(response):
+    response = response.read()
+    response = response.decode()    
+    data = json.loads(response)
+    if data['statusCode'] == 200:
+        data = data['body']
+        return(data)
+    else:
+        return false
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
