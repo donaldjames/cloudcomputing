@@ -7,12 +7,50 @@
 {% block body_id %}landing_page{% endblock %}
 
 {% block page_block %}
-	<p>Data Used: {{ message.companyName }}</p>
-	<p>Window size: {{ message.windowSize }}</p>
-	<p>Confidence Interval: {{ message.confdn_intrvl }}</p>
-	<p>Sample Size(S): {{ message.sampleSize }}</p>
-	<p>Resources(R): {{ message.resources }}</p>
-	<p>Average VAR: {{ message.average_var_value }} ({{ message.var_percentage }}%)</p>
-	<p>List of values returned for {{ message.sampleSize }} / {{ message.resources }} samples using {{ message.resources }} parallel calls to lambda function</p>
-	<p>{{ message.var_list }}</p>
+	<table>
+		<tr>
+			<td>Data Used:</td>
+			<td>{{ message.companyName }}</td>
+		</tr>
+		<tr>
+			<td>Date:</td>
+			<td>{{ message.date }}</td>
+		</tr>
+		<tr>
+			<td>Window size:</td>
+			<td>{{ message.windowSize }}</td>
+		</tr>
+		<tr>
+			<td>Confidence Interval:</td>
+			<td>{{ message.confdn_intrvl }}</td>
+		</tr>
+		<tr>
+			<td>Sample Size(S):</td>
+			<td>{{ message.sampleSize }}</td>
+		</tr>
+		<tr>
+			<td>Resources(R):</td>
+			<td>{{ message.resources }}</td>
+		</tr>
+		<tr>
+			<td>Average VAR:</td>
+			<td>{{ message.average_var_value }}</td>
+		</tr>
+		<tr>
+			<td>Profit/Loss(in percentage):</td>
+			<td>{{ message.profit_or_loss }}%</td>
+		</tr>
+		<tr>
+			<td>Mean:</td>
+			<td>{{ message.mean }}</td>
+		</tr>
+		<tr>
+			<td>Standard deviation:</td>
+			<td>{{ message.std }}</td>
+		</tr>
+		<tr>
+			<td>VaR list for parallel request:</td>
+			<td>{{ message.var_list }}</td>
+		</tr>
+	</table>
 {% endblock page_block %}
