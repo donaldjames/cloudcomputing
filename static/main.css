@@ -76,12 +76,13 @@ IMG.displayed{
 
 #table-wrapper {
   position:relative;
+  border: 1px solid black;
 }
 
 #table-scroll {
   height:250px;
   overflow:auto;  
-  margin-top:20px;
+  /*margin-top:20px;*/
 }
 
 #table-wrapper table {
@@ -90,7 +91,7 @@ IMG.displayed{
 }
 
 #table-wrapper table * {
-  background: yellow;
+  background: #eed209;
   color:black;
 }
 
@@ -101,6 +102,19 @@ IMG.displayed{
   height:20px;
   width:35%;
   border:1px solid red;
+}
+
+th {
+	border-bottom: 1px solid;
+	border-right: 1px solid;
+}
+
+td.adjusted_closing {
+	background: #ff0000 !important;
+}
+
+td.moving_average {
+	background: #0e8e1b !important;
 }
 
 body#var_calculator_window {
@@ -121,7 +135,7 @@ body#var_calculator_window {
 #landing_page button {
 	height: 70px;
 	width: 120px;
-	background-color: yellow;
+	background-color: #eed209;
 }
 
 #landing_page input	{
@@ -197,3 +211,7 @@ table th {
 	font-size: 25px !important;
 }
 
+.content_block {
+	width: 90%;
+	margin: 0 auto;
+}
