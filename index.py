@@ -26,9 +26,9 @@ def doRender(tname, values={}):
 def varcalculationwindow():
     if request.method == 'GET':
         companyName = request.args.get("cn")
-        # cwindowSize = request.args("windowSize")
+        maxws = request.args.get("mxws")
         date = request.args.get("date")
-        parameters = {'companyName': companyName, 'date': date}
+        parameters = {'companyName': companyName, 'date': date, 'maxws': maxws}
         return render_template("varcalculator_popupwindow.html", parameters=parameters)
 ############################################################################################
 
