@@ -1,7 +1,7 @@
 body {
 	text-align: justify;
-	/*font: 15px Arial, Helvetica, sans-serif;*/
-	font-family: 'Enriqueta';
+	font: 15px Arial, Helvetica, sans-serif;
+	/*font-family: 'Enriqueta';*/
 	font-size: 20px;
 	color: #626262;
 	background: #fff;
@@ -133,14 +133,14 @@ body#var_calculator_window {
 }
 
 #landing_page button {
-	height: 70px;
+	height: 50px;
 	width: 120px;
 	background-color: #eed209;
 }
 
 #landing_page input	{
-	height: 30px;
-	font-size: 21px;
+	height: 25px;
+	font-size: 19px;
 }
 
 #landing_page_form {
@@ -149,7 +149,7 @@ body#var_calculator_window {
 }
 
 #landing_page_form label {
-	font-size: 24px;
+	font-size: 20px;
 }
 
 .up_arrow {
