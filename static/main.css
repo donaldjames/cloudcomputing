@@ -215,3 +215,19 @@ table th {
 	width: 90%;
 	margin: 0 auto;
 }
+
+body#var_calculator_window #button_div {
+	margin-top: 10px;
+}
+
+body#var_calculator_window #button_div button{
+	width: 120px;
+}
+
+table.var_listing td {
+	min-width: 220px;
+}
+
+table.var_listing {
+	border-spacing: 5px;
+}
