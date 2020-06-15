@@ -21,17 +21,6 @@ def doRender(tname, values={}):
         return render_template('index.html')
     return render_template(tname, **values)
 
-############################################################################################
-@app.route('/varcalc', methods=['GET', 'POST'])
-def varcalculationwindow():
-    if request.method == 'GET':
-        companyName = request.args.get("cn")
-        maxws = request.args.get("mxws")
-        date = request.args.get("date")
-        parameters = {'companyName': companyName, 'date': date, 'maxws': maxws}
-        return render_template("varcalculator_popupwindow.html", parameters=parameters)
-############################################################################################
-
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('ERROR!')
@@ -39,53 +28,66 @@ def server_error(e):
         An error occurred: <pre>{}</pre>
         """.format(e), 500
 
-@app.route('/varcalculator', methods=['GET', 'POST'])
-def varcalculation():
-    if request.method == 'POST':
-        companyName = request.form.get("companyName")
-        windowSize = request.form.get("windowSize")
-        confdn_intrvl = request.form.get("confdn_intrvl")
-        sampleSize = request.form.get("sampleSize")
-        resources = request.form.get("resources")
-        date = request.form.get("date")
-        date = decode_date(date)
-        resource_count = int(resources)
-        sample = str(round(int(sampleSize)/resource_count))
-        parameters = '{"windowSize": "'+windowSize+'", "companyName": "'+companyName+'", "date": "'+date+'", "confdn_intrvl": "'+confdn_intrvl+'", "sampleSize": "'+sample+'"}'
-        pool = mp.Pool(processes = resource_count)
-        var_res_list=pool.map(var_calc_lambda_function, [parameters for x in range(1,resource_count+1)])
-        mean = [] 
-        std = []
-        var = []
-        for res in var_res_list:
-            mean.append(float(res['mean']))
-            std.append(float(res['std']))
-            var.append(float(res['var']))
-        var_avg = sum(var)/resource_count
-        var_percentage = var_avg * int(sample)
-        profitorloss = round(float(res['profitorloss']), 2)
-        message = {
-            "var_list": var,
-            "average_var_value": var_avg,
-            "companyName": companyName,
-            "windowSize": windowSize,
-            "resources": resource_count,
-            "confdn_intrvl": confdn_intrvl,
-            "sampleSize": sampleSize,
-            "var_percentage": var_percentage,
-            "mean": mean[0],
-            "std": std[0],
-            "date": date,
-            "profit_or_loss": profitorloss
-        }
-    return render_template('varcalctemplate.html', message=message)
+############################################################################################
+# local VaR calculation code
+# @app.route('/varcalc', methods=['GET', 'POST'])
+# def varcalculationwindow():
+#     if request.method == 'GET':
+#         companyName = request.args.get("cn")
+#         maxws = request.args.get("mxws")
+#         date = request.args.get("date")
+#         parameters = {'companyName': companyName, 'date': date, 'maxws': maxws}
+#         return render_template("varcalculator_popupwindow.html", parameters=parameters)
 
-def var_calc_lambda_function(parameters):
-    c = http.client.HTTPSConnection(amazon_instance)
-    c.request("POST", newSeries, parameters)
-    response = c.getresponse()
-    response = decode_response(response)
-    return response
+
+# @app.route('/varcalculator', methods=['GET', 'POST'])
+# def varcalculation():
+#     if request.method == 'POST':
+#         companyName = request.form.get("companyName")
+#         windowSize = request.form.get("windowSize")
+#         confdn_intrvl = request.form.get("confdn_intrvl")
+#         sampleSize = request.form.get("sampleSize")
+#         resources = request.form.get("resources")
+#         date = request.form.get("date")
+#         date = decode_date(date)
+#         resource_count = int(resources)
+#         sample = str(round(int(sampleSize)/resource_count))
+#         parameters = '{"windowSize": "'+windowSize+'", "companyName": "'+companyName+'", "date": "'+date+'", "confdn_intrvl": "'+confdn_intrvl+'", "sampleSize": "'+sample+'"}'
+#         pool = mp.Pool(processes = resource_count)
+#         var_res_list=pool.map(var_calc_lambda_function, [parameters for x in range(1,resource_count+1)])
+#         mean = [] 
+#         std = []
+#         var = []
+#         for res in var_res_list:
+#             mean.append(float(res['mean']))
+#             std.append(float(res['std']))
+#             var.append(float(res['var']))
+#         var_avg = sum(var)/resource_count
+#         var_percentage = var_avg * int(sample)
+#         profitorloss = round(float(res['profitorloss']), 2)
+#         message = {
+#             "var_list": var,
+#             "average_var_value": var_avg,
+#             "companyName": companyName,
+#             "windowSize": windowSize,
+#             "resources": resource_count,
+#             "confdn_intrvl": confdn_intrvl,
+#             "sampleSize": sampleSize,
+#             "var_percentage": var_percentage,
+#             "mean": mean[0],
+#             "std": std[0],
+#             "date": date,
+#             "profit_or_loss": profitorloss
+#         }
+#     return render_template('varcalctemplate.html', message=message)
+
+# def var_calc_lambda_function(parameters):
+#     c = http.client.HTTPSConnection(amazon_instance)
+#     c.request("POST", newSeries, parameters)
+#     response = c.getresponse()
+#     response = decode_response(response)
+#     return response
+############################################################################################
 
 # post the window size and the company name calls lambda and shows the
 # graph and table in template
