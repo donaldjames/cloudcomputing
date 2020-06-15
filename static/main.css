@@ -231,3 +231,7 @@ table.var_listing td {
 table.var_listing {
 	border-spacing: 5px;
 }
+
+.table_block {
+	padding-bottom: 40px;
+}
