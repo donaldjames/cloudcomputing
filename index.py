@@ -10,6 +10,7 @@ app = Flask(__name__)
 import socket
 socket.getaddrinfo('127.0.0.1', 8080)
 
+# The AWS instance URL and the lambda function names
 amazon_instance = "pwix736lp7.execute-api.us-east-1.amazonaws.com"
 startEc2Instance = "/default/startEc2Instance"
 dataFetchLambda = "/default/s3-lambda-function"
@@ -116,6 +117,10 @@ def movingaveragecalculation():
         graph_data = {'Dates': dataFrame["Date"].to_list(), 'Movingavg': dataFrame["Moving Average"].to_list(), 'Price': dataFrame["Adj Close"].to_list()}
         return render_template('listingpage.html', dataArray=dataset, headers=headers, graphData=graph_data, companyName=companyName)
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def mainPage(path):
+    return doRender(path)
 
 # listing page table values
 def listing_page_data(data):
@@ -142,14 +147,17 @@ def listing_page_data(data):
         dataset.append(row)
     return dataset
 
+# Convert the date to 'yyyy-mm-dd' format
 def encode_date(date):
     dd, mm, yyyy = date.split('/')
     return (yyyy+'-'+mm+'-'+dd)
 
+# Convert the date to 'dd/mm/yyyy' format
 def decode_date(date):
     yyyy, mm, dd = date.split('-')
     return (dd+'/'+mm+'/'+yyyy)
 
+# This function decodes the API response
 def decode_response(response):
     response = response.read()
     response = response.decode()    
@@ -159,21 +167,6 @@ def decode_response(response):
         return(data)
     else:
         return false
-
-def decode_var_response(response):
-    response = response.read()
-    response = response.decode()    
-    data = json.loads(response)
-    if data['statusCode'] == 200:
-        data = data['body']
-        return(data)
-    else:
-        return false
-
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def mainPage(path):
-    return doRender(path)
 
 
 if __name__ == '__main__':

@@ -25,7 +25,6 @@ var layout = {
   height: 600,
   xaxis: {
     autorange: true,
-    range: ['2015-02-17', '2017-02-16'],
     rangeselector: {buttons: [
         {
           count: 1,
@@ -41,7 +40,6 @@ var layout = {
         },
         {step: 'all'}
       ]},
-    // rangeslider: {range: ['2015-02-17', '2017-02-16']},
     type: 'dates'
   },
   yaxis: {
